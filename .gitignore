@@ -36,7 +36,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -50,5 +49,10 @@ test
 prompt
 
 server.log
+
 # Skills directory
 /skills/
+
+# Database (tidak dipakai lagi)
+/db/
+/prisma/
