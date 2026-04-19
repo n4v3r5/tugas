@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String             @id @default(cuid())
+  name            String             @default("Reader")
+  email           String             @unique
+  points          Int                @default(0)
+  readingProgress Int                @default(0)
+  readingHistory  ReadingProgress[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model Book {
+  id          String             @id @default(cuid())
+  title       String
+  author      String
+  coverImage  String
+  genres      String
+  excerpt     String
+  chapters    Chapter[]
+  progress    ReadingProgress[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model Chapter {
+  id        String   @id @default(cuid())
+  bookId    String
+  title     String
+  content   String
+  order     Int
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ReadingProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  bookId    String
+  chapter   Int      @default(0)
+  progress  Int      @default(0)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, bookId])
+}
